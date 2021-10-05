@@ -7,7 +7,7 @@ def TP(arr, threshold):
 
 
 def TN(arr, threshold):
-    return arr[(arr[:, 0] <= threshold) & (arr[:, 1] == 1)].shape[0]
+    return arr[(arr[:, 0] < threshold) & (arr[:, 1] == 1)].shape[0]
 
 
 def FP(arr, threshold):
@@ -15,7 +15,7 @@ def FP(arr, threshold):
 
 
 def FN(arr, threshold):
-    return arr[(arr[:, 0] <= threshold) & (arr[:, 1] == 0)].shape[0]
+    return arr[(arr[:, 0] < threshold) & (arr[:, 1] == 0)].shape[0]
 
 
 def recall(probe_predicts, threshold):
