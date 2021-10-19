@@ -64,9 +64,10 @@ class MPF:
             for i in range(self.train_X.shape[0]):
                 if self.predict(X[i]) != y[i]:
                     self.potentials[i] += 1
-        
-        nonzero_indexes = np.nonzero(self.potentials)
-        self.train_X = self.train_X[nonzero_indexes]
-        self.train_y = self.train_y[nonzero_indexes]
-        self.potentials = self.potentials[nonzero_indexes]
+                
+        self.zero_indexes = np.where(self.potentials == 0)[0]
+        self.nonzero_indexes = np.nonzero(self.potentials)
+        self.train_X = self.train_X[self.nonzero_indexes]
+        self.train_y = self.train_y[self.nonzero_indexes]
+        self.potentials = self.potentials[self.nonzero_indexes]
     
