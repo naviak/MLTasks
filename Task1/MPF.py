@@ -46,7 +46,7 @@ class MPF:
     
     
     def predict(self, X):
-        pred_array = np.zeros_like(np.unique(self.train_y))
+        pred_array = np.zeros_like(np.unique(self.train_y), dtype=np.float)
         for i in range(len(self.train_X)):
             label = self.train_y[i]
             dist = distance.minkowski(X,self.train_X[i],self.metric_power)
