@@ -44,6 +44,8 @@ class MPF:
     def predict_array(self, X):
         return np.array([self.predict(i) for i in X])
     
+    def predict_array_broadcast(self, X):
+        return np.array([self.predict_broadcast(i) for i in X])
     
     def predict(self, X):
         pred_array = np.zeros_like(np.unique(self.train_y), dtype=np.float)
@@ -53,11 +55,22 @@ class MPF:
             pred_array[label] += self.potentials[i] * self.kernel(dist / self.H)
         return np.argmax(pred_array)
     
-    
+    def predict_broadcast(self, X):
+        test_x = np.copy(X)
+        test_x = test_x[np.newaxis, :]
+        diff = test_x[:, np.newaxis, :] - self.train_X[np.newaxis, :, :]
+        distances = np.sqrt(np.sum((diff ** 2), -1))
+        weights = self.potentials * self.kernel(distances / self.H)
+        classes = np.unique(self.train_y) 
+        pred_array = np.zeros((test_x.shape[0], len(classes)))            
+        for c in classes:
+            pred_array[:, c] = np.sum(weights[:, self.train_y == c], axis=1)
+        return np.argmax(pred_array, axis=1)
+        
     def fit(self, X, y, iterations = 10):
         assert X.shape[0] == y.shape[0]
-        self.train_X = X
-        self.train_y = y
+        self.train_X = np.copy(X)
+        self.train_y = np.copy(y)
         self.potentials = np.zeros_like(y, dtype=int)
         
         for _ in range(iterations):
