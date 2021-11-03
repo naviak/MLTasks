@@ -35,10 +35,10 @@ class MNISTClassifier():
         return cross_val_score(self.model, self.X, self.y, cv=5)
             
 
-def showMnistExamples(X, y, num):
+def showMnistExamples(X, y, num, ximg = 28, yimg = 28):
     _, ax = plt.subplots(2, 5)
     ax = ax.flatten()
     for i in range(10):
         im_idx = np.where(y == i)[0][num]
-        plottable_image = np.reshape(X[im_idx], (28, 28))
+        plottable_image = np.reshape(X[im_idx], (ximg,yimg))
         ax[i].imshow(plottable_image, cmap='gray_r')
