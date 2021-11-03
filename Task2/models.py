@@ -42,3 +42,15 @@ def showMnistExamples(X, y, num, ximg = 28, yimg = 28):
         im_idx = np.where(y == i)[0][num]
         plottable_image = np.reshape(X[im_idx], (ximg,yimg))
         ax[i].imshow(plottable_image, cmap='gray_r')
+        
+def showDistributions(X, y):
+    _, ax = plt.subplots(2, 5)
+    ax = ax.flatten()
+    for i in range(10):
+        im_idx = np.where(y == i)[0]
+        X_mod = np.copy(X[im_idx])
+        X_mod[X_mod > 0] = 1
+        s = np.sum(X_mod, axis = 0)
+        s = np.reshape(s, (28,28))
+        plottable_image = np.reshape(s, (28, 28))
+        ax[i].imshow(plottable_image, cmap='jet')
