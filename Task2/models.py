@@ -2,10 +2,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import train_test_split
+from sklearn.decomposition import PCA
 
 class MNISTClassifier():
-    def __init__(self, model, X, y, test_size=0.25, random_state=2, fitting = True):
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state)
+    def __init__(self, model, X, y, test_size=0.25, random_state=2, fitting = True, PCA_flag = False, components=0):
+        if PCA_flag:
+            if not components:
+                print("zero components for PCA, ignore PCA")
+            pca = PCA(n_components = components)
+            X_new = pca.fit_transform(X)
+        else:
+            X_new = X
+        X_train, X_test, y_train, y_test = train_test_split(X_new, y, test_size=test_size, random_state=random_state)
         self.model = model
         
         if fitting:
@@ -15,7 +23,7 @@ class MNISTClassifier():
         
         self.y_test = y_test
         self.X_test = X_test
-        self.X = X
+        self.X = X_new
         self.y = y
         self.fitted = fitting
 
